@@ -100,7 +100,7 @@ class LocalUpdate(object):
                 for param_group in self.optimizer.param_groups:
                     param_group['lr'] = adjust_lr
 
-            for (_, images, labels) in self.ldr_train:
+            for batch_idx, (_, images, labels) in enumerate(self.ldr_train):
                 images, labels = images.to(self.args.device), labels.to(self.args.device)
                 
                 self.optimizer.zero_grad()
