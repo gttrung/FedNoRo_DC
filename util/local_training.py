@@ -95,7 +95,7 @@ class LocalUpdate(object):
             batch_loss_FedDC = []
             # based on cyclic learning rate foluma in O2U-Net paper
             if self.args.lr_cyclic:
-                scale = (iter % (epoch//2)) / float(epoch//2)
+                scale = (epoch % (self.args.local_ep//2)) / float(self.args.local_ep//2)
                 adjust_lr = (1 - scale) * self.lr + scale * self.args.lr_min
                 for param_group in self.optimizer.param_groups:
                     param_group['lr'] = adjust_lr
