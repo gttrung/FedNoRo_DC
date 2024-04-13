@@ -107,7 +107,7 @@ class LocalUpdate(object):
                 logits = net(images)
                 loss = ce_criterion(logits, labels)
                 if self.args.beta > 0:
-                    if _ > 0:
+                    if batch_idx > 0:
                         w_diff = torch.tensor(0.).to(self.args.device)
                         for w, w_t in zip(net_glob.parameters(), net.parameters()):
                             w_diff += torch.pow(torch.norm(w - w_t), 2)
