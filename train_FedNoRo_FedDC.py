@@ -119,7 +119,9 @@ if __name__ == '__main__':
                 # store every updated model
                 w_locals.append(copy.deepcopy(w_local))
                 loss_locals.append(copy.deepcopy(loss_local))
-
+            if args.method == 'loss_thresh':
+                if rnd == 0:
+                    loss_thresh /= args.n_clients
             w_locals_last = copy.deepcopy(w_locals)
             dict_len = [len(dict_users[idx]) for idx in user_id]
             w_glob_fl = FedAvg(w_locals, dict_len)
