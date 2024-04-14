@@ -197,6 +197,7 @@ if __name__ == '__main__':
 
     logging.info(
         f"selected noisy clients: {noisy_clients},\n real noisy clients: {np.where(gamma_s>0.)[0]}")
+    logging.info(f"new selected noisy clients: {new_noisy_clients}")
     clean_clients = list(set(user_id) - set(noisy_clients))
 
     if args.method == 'loss_thresh':
@@ -205,6 +206,7 @@ if __name__ == '__main__':
                 if idx not in clean_clients:
                     clean_clients.append(idx)
     logging.info(f"selected clean clients: {clean_clients}")
+    logging.info(f"new selected clean clients: {new_clean_clients}")
 
     # ------------------------ Stage 2: ------------------------ 
     BACC = []
