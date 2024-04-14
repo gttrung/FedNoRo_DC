@@ -20,9 +20,9 @@ def separate_users(args, dict_users):
 def merge_users(dict_users, new_users, args, stage = 1):
     
     if stage == 1:
-        n_new_clients = np.round(args.n_new_clients*args.stage_ratio)
+        n_new_clients = int(np.round(args.n_new_clients*args.stage_ratio))
     elif stage == 2:
-        n_new_clients = np.ceil(args.n_new_clients*(1-args.stage_ratio))
+        n_new_clients = int(np.ceil(args.n_new_clients*(1-args.stage_ratio)))
                             
     for _ in range(n_new_clients):
           
