@@ -95,6 +95,7 @@ if __name__ == '__main__':
                 new_noisy_clients = []
                 new_clean_clients = []
                 user_id = list(range(args.n_clients))
+                compute_loss_thresh = True
             
             if rnd == 0:
                 loss_thresh = 0
@@ -106,10 +107,12 @@ if __name__ == '__main__':
                     net=copy.deepcopy(netglob).to(args.device), writer=writer)
                 
                 if args.method == 'loss_thresh':
-                    if rnd == 0:
-                        loss_thresh += loss_local
                     if num_user_old < num_user_new:
+                        loss_thresh += loss_local
                         if idx in new_clients:
+                            if compute_loss_thresh:
+                                loss_thresh /= num_user_old
+                                compute_loss_thresh = False
                             num_user_old += 1
                             if loss_local >= loss_thresh:
                                 new_noisy_clients.append(idx)
@@ -119,9 +122,10 @@ if __name__ == '__main__':
                 # store every updated model
                 w_locals.append(copy.deepcopy(w_local))
                 loss_locals.append(copy.deepcopy(loss_local))
-            if args.method == 'loss_thresh':
-                if rnd == 0:
-                    loss_thresh /= args.n_clients
+            # if args.method == 'loss_thresh':
+            #     # if rnd == 0:
+            #     if rnd == args.joining_round[0]:
+            #         loss_thresh /= args.n_clients
             w_locals_last = copy.deepcopy(w_locals)
             dict_len = [len(dict_users[idx]) for idx in user_id]
             w_glob_fl = FedAvg(w_locals, dict_len)
