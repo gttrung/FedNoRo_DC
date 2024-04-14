@@ -107,12 +107,12 @@ class LocalUpdate(object):
                 logits = net(images)
                 loss = ce_criterion(logits, labels)
                 if self.args.beta > 0:
-                    w_diff = torch.tensor(0.).to(self.args.device)
-                    for w, w_t in zip(net_glob.parameters(), net.parameters()):
-                        w_diff += torch.pow(torch.norm(w - w_t), 2)
-                    w_diff = torch.sqrt(w_diff)
-                    # loss += self.args.beta * mu * w_diff
-                    loss_FedDC = loss + self.args.beta * w_diff
+                        w_diff = torch.tensor(0.).to(self.args.device)
+                        for w, w_t in zip(net_glob.parameters(), net.parameters()):
+                            w_diff += torch.pow(torch.norm(w - w_t), 2)
+                        w_diff = torch.sqrt(w_diff)
+                        # loss += self.args.beta * mu * w_diff
+                        loss_FedDC = loss + self.args.beta * w_diff
                 
 
                 loss.backward()
@@ -122,6 +122,8 @@ class LocalUpdate(object):
                 batch_loss_FedDC.append(loss_FedDC.item())
                 writer.add_scalar(
                     f'client{self.id}/loss_train', loss.item(), self.iter_num)
+                writer.add_scalar(
+                    f'client{self.id}/loss_train_FedDC', loss_FedDC.item(), self.iter_num)
                 self.iter_num += 1
             self.epoch = self.epoch + 1
             epoch_loss.append(np.array(batch_loss).mean())

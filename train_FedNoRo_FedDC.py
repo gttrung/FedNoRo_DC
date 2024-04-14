@@ -107,11 +107,11 @@ if __name__ == '__main__':
                 
                 if args.method == 'loss_thresh':
                     if rnd == 0:
-                        loss_thresh += loss_FedDC
+                        loss_thresh += loss_local
                     if num_user_old < num_user_new:
                         if idx in new_clients:
                             num_user_old += 1
-                            if loss_FedDC >= loss_thresh:
+                            if loss_local >= loss_thresh:
                                 new_noisy_clients.append(idx)
                             else:
                                 new_clean_clients.append(idx)
@@ -200,11 +200,6 @@ if __name__ == '__main__':
     logging.info(f"new selected noisy clients: {new_noisy_clients}")
     clean_clients = list(set(user_id) - set(noisy_clients))
 
-    if args.method == 'loss_thresh':
-        if len(new_clean_clients) > 0:
-            for idx in new_clean_clients:
-                if idx not in clean_clients:
-                    clean_clients.append(idx)
     logging.info(f"selected clean clients: {clean_clients}")
     logging.info(f"new selected clean clients: {new_clean_clients}")
 
@@ -231,10 +226,12 @@ if __name__ == '__main__':
                 w_local, loss_local, loss_FedDC = local.train_LA(
                     net=copy.deepcopy(netglob).to(args.device), writer=writer)
                 if args.method == 'loss_thresh':
-                    if loss_FedDC >= loss_thresh:
+                    if loss_local >= loss_thresh:
                         noisy_clients.append(idx)
+                        logging.info(f"new noisy client: {idx}")
                     else:
                         clean_clients.append(idx)
+                        logging.info(f"new clean client: {idx}")
             elif idx in clean_clients:
                 w_local, loss_local, loss_FedDC = local.train_LA(
                     net=copy.deepcopy(netglob).to(args.device), writer=writer)
