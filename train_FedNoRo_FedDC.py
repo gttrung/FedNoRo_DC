@@ -108,7 +108,6 @@ if __name__ == '__main__':
                 
                 if args.method == 'loss_thresh':
                     if num_user_old < num_user_new:
-                        loss_thresh += loss_local
                         if idx in new_clients:
                             if compute_loss_thresh:
                                 loss_thresh /= num_user_old
@@ -121,6 +120,8 @@ if __name__ == '__main__':
                             else:
                                 print(f'Clean client {idx}:{loss_local}')
                                 new_clean_clients.append(idx)
+                        else:
+                            loss_thresh += loss_local
 
                 # store every updated model
                 w_locals.append(copy.deepcopy(w_local))
