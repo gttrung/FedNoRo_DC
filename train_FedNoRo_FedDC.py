@@ -112,11 +112,14 @@ if __name__ == '__main__':
                         if idx in new_clients:
                             if compute_loss_thresh:
                                 loss_thresh /= num_user_old
+                                print(loss_thresh)
                                 compute_loss_thresh = False
                             num_user_old += 1
                             if loss_local >= loss_thresh:
+                                print(loss_local)
                                 new_noisy_clients.append(idx)
                             else:
+                                print(loss_local)
                                 new_clean_clients.append(idx)
 
                 # store every updated model
